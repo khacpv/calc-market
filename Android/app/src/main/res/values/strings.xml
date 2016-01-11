@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CalcMarket</string>
+    <string name="main_font">fonts/HighSpeed.ttf</string>
+</resources>
