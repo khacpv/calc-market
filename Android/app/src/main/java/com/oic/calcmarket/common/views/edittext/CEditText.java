@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 
@@ -19,6 +20,8 @@ public class CEditText extends EditText {
     private Paint mPaint;
 
     private String assetFont = "";
+
+    private OnKeyBackListener onKeyBackListener;
 
     public CEditText(Context context) {
         super(context);
@@ -79,5 +82,20 @@ public class CEditText extends EditText {
 //        }
 
         super.onDraw(canvas);
+    }
+
+
+
+    public boolean onKeyPreIme(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK &&
+                event.getAction() == KeyEvent.ACTION_UP && onKeyBackListener != null) {
+            onKeyBackListener.onKeyBack();
+            return false;
+        }
+        return super.dispatchKeyEvent(event);
+    }
+
+    public void setOnKeyBackListener(OnKeyBackListener listener){
+        this.onKeyBackListener = listener;
     }
 }

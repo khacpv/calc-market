@@ -1,4 +1,13 @@
+<!--
+ drag sort list view: http://stackoverflow.com/questions/2909311/android-list-view-drag-and-drop-sort
+
+ -->
 <resources>
     <string name="app_name">CalcMarket</string>
-    <string name="main_font">fonts/HighSpeed.ttf</string>
+    <string name="main_font">fonts/dotmat.ttf</string>
+    <string name="second_font">fonts/HighSpeed.ttf</string>
+
+
+    <string name="upc_api_key">20906bbcd09ad1aa2719e783d3c79d07</string>
+    <string name="barcode_key">NCetnzaYBB8M1PoIpChnyCrfBBzKHaaVE1AqGJO+CLA</string>
 </resources>

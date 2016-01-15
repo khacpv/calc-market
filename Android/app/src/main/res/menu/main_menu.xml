@@ -3,9 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group>
         <item
+            android:id="@+id/menuScan"
+            android:icon="@drawable/ic_scan"
+            android:title="Scan"
+            app:showAsAction="always" />
+        <item
             android:id="@+id/menuSubmit"
             android:icon="@drawable/ic_submit"
             android:title="Setting"
-            app:showAsAction="ifRoom" />
+            app:showAsAction="always" />
     </group>
 </menu>

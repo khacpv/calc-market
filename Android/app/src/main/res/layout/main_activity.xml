@@ -13,18 +13,21 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        app:theme="@style/ThemeToolbar"/>
+        app:theme="@style/ThemeToolbar"
+        android:layout_marginBottom="16dp"/>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:visibility="gone"
         android:layout_below="@id/toolbar">
-
         <RelativeLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="16dp">
 
             <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/card_view"
@@ -40,7 +43,6 @@
                     android:minHeight="500dp"
                     android:paddingTop="20dp"
                     android:paddingBottom="20dp"
-                    android:paddingRight="10dp"
                     android:orientation="vertical"
                     android:layout_height="match_parent">
 
@@ -62,33 +64,39 @@
                         android:background="@drawable/xml_bill_separate"
                         android:layerType="software"/>
 
-                    <com.oic.calcmarket.common.views.market.BillLayout
+                    <LinearLayout
+                        android:id="@+id/layoutProducts"
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content">
+                        <com.oic.calcmarket.common.views.market.BillLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
 
-                    <com.oic.calcmarket.common.views.market.BillLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        <com.oic.calcmarket.common.views.market.BillLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
 
-                    <com.oic.calcmarket.common.views.market.BillLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        <com.oic.calcmarket.common.views.market.BillLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
 
-                    <com.oic.calcmarket.common.views.market.BillLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        <com.oic.calcmarket.common.views.market.BillLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
 
-                    <com.oic.calcmarket.common.views.market.BillLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        <com.oic.calcmarket.common.views.market.BillLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
 
-                    <com.oic.calcmarket.common.views.market.BillLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        <com.oic.calcmarket.common.views.market.BillLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
 
-                    <com.oic.calcmarket.common.views.market.BillLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        <com.oic.calcmarket.common.views.market.BillLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -130,4 +138,54 @@
         </RelativeLayout>
     </ScrollView>
 
+    <FrameLayout
+        android:id="@+id/scanLayout"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@id/toolbar"
+        android:alpha="0"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="#2222"/>
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:background="#FF0"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_below="@id/toolbar">-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="match_parent"/>-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="#F00"-->
+            <!--android:layout_height="match_parent"/>-->
+    <!--</LinearLayout>-->
+    <!--<com.oic.calcmarket.common.views.custom.TriangleView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_marginTop="300dp"-->
+        <!--android:layout_below="@id/toolbar"-->
+        <!--android:orientation="vertical"-->
+        <!--android:gravity="center">-->
+        <!--<Button-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="hello worl"-->
+            <!--android:background="#FFF"/>-->
+        <!--<Button-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content" -->
+            <!--android:text="hello worl"-->
+            <!--android:background="#FFF"/>-->
+        <!--<ImageView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:src="@drawable/ic_menu_bg"-->
+            <!--android:scaleType="fitXY"/>-->
+    <!--</com.oic.calcmarket.common.views.custom.TriangleView>-->
 </RelativeLayout>
