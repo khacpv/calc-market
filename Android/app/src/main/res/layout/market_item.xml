@@ -55,7 +55,7 @@
             android:layout_weight="20"
             android:background="@color/colorTransparent"
             android:gravity="right"
-            android:inputType="numberDecimal|textNoSuggestions"
+            android:inputType="number|textNoSuggestions"
             android:maxLength="10"
             android:paddingRight="10dp"
             android:singleLine="true"

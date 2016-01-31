@@ -1,5 +1,6 @@
 package com.oic.calcmarket;
 
+import android.location.LocationManager;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.oic.calcmarket.common.views.market.BillLayout;
 import com.oic.calcmarket.common.views.residemenu.ResideMenu;
 import com.oic.calcmarket.common.views.residemenu.ResideMenuItem;
 import com.oic.calcmarket.models.BarcodeRsp;
+import com.oic.calcmarket.screens.bill.BillGetter;
 import com.scandit.barcodepicker.BarcodePicker;
 import com.scandit.barcodepicker.OnScanListener;
 import com.scandit.barcodepicker.ScanSession;
@@ -28,14 +30,20 @@ import com.scandit.barcodepicker.ScanSettings;
 import com.scandit.barcodepicker.ScanditLicense;
 import com.scandit.recognition.Barcode;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import dagger.Component;
+import dagger.Module;
+import dagger.Provides;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, OnScanListener, BillLayout.OnBillChangedListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener, OnScanListener, BillLayout.OnBillChangedListener {
 
     public static final String titles[] = {"Shopping", "History", "Settings"};
     public static final int icon[] = {R.drawable.ic_menu_home, R.drawable.ic_menu_profile, R.drawable.ic_menu_setting};
@@ -63,9 +71,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Handler mHandler = new Handler();
 
+    @Inject
+    LocationManager locationManager;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.main_activity);
 
         resideMenu = new ResideMenu(this);
@@ -90,6 +102,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             BillLayout item = (BillLayout)layoutProducts.getChildAt(i);
             item.reset();
             item.setOnBillChangedListener(this);
+        }
+
+        MainActivityComponent component = DaggerMainActivity_MainActivityComponent.builder()
+                .build();
+        BillGetter bill = component.billGetter();
+        Log.e("TAG", bill.getBill());
+        ((MainApplication) getApplication()).component().inject(this);
+        Log.e("TAG", locationManager.toString());
+    }
+
+    @Component(modules = MainActivityModule.class)
+    @Singleton
+    public interface MainActivityComponent{
+        BillGetter billGetter();
+    }
+
+    @Module
+    public static class MainActivityModule {
+        @Provides
+        public BillGetter provideBillGetter(){
+            return new BillGetter() {
+                @Override
+                public String getBill() {
+                    return "Hello World";
+                }
+            };
         }
     }
 
