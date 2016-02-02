@@ -8,6 +8,11 @@
             android:title="Scan"
             app:showAsAction="always" />
         <item
+            android:id="@+id/menuAddNew"
+            android:icon="@android:drawable/ic_menu_add"
+            android:title="Add New"
+            app:showAsAction="always" />
+        <item
             android:id="@+id/menuSubmit"
             android:icon="@drawable/ic_submit"
             android:title="Setting"

@@ -9,7 +9,7 @@ import com.oic.calcmarket.models.BaseBillData;
 /**
  * Created by khacpham on 2/2/16.
  */
-public class BillView extends FrameLayout {
+public abstract class BillView extends FrameLayout {
     public BillView(Context context) {
         super(context);
     }
@@ -22,7 +22,5 @@ public class BillView extends FrameLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    public void setDataContext(BaseBillData data) {
-
-    }
+    public abstract void setDataContext(int position,BaseBillData data);
 }

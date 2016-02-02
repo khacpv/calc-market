@@ -36,12 +36,14 @@ public class BillAdapter extends RecyclerView.Adapter<BillViewHolder> {
         }else if(viewType == BaseBillData.TYPE_BILL_FOOTER){
             view = new BillViewFooter(context);
         }
-        return new BillViewHolder(view);
+        BillViewHolder holder = new BillViewHolder(view);
+        holder.setIsRecyclable(false);  // fix Scrapped or attached views may not be recycled
+        return holder;
     }
 
     @Override
     public void onBindViewHolder(BillViewHolder holder, int position) {
-        holder.setData(lists.get(position));
+        holder.setData(position,lists.get(position));
     }
 
     @Override

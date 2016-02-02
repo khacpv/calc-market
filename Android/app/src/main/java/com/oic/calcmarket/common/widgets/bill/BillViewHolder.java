@@ -13,7 +13,7 @@ public class BillViewHolder extends RecyclerView.ViewHolder {
         super(billViewItem);
     }
 
-    public void setData(BaseBillData item){
-        ((BillView)itemView).setDataContext(item);
+    public void setData(int position,BaseBillData item){
+        ((BillView)itemView).setDataContext(position,item);
     }
 }

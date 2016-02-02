@@ -1,5 +1,6 @@
 package com.oic.calcmarket.screens.bill;
 
+import android.animation.LayoutTransition;
 import android.os.Handler;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -108,6 +109,7 @@ public class BillActivity extends BaseActivity implements View.OnClickListener, 
         adapter = new BillAdapter(this,data,this);
         layoutProducts.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         layoutProducts.setAdapter(adapter);
+        layoutProducts.setLayoutTransition(new LayoutTransition());
     }
 
     private Collection<? extends BaseBillData> getDataSample(int count) {
@@ -228,6 +230,16 @@ public class BillActivity extends BaseActivity implements View.OnClickListener, 
         else if(id == R.id.menuScan) {
             Log.e("TAG", "submit clicked");
             toggleScan();
+        }
+        else if(id == R.id.menuAddNew){
+            int size = data.size();
+            BillItem billItem = new BillItem(BaseBillData.TYPE_BILL_ITEM);
+            billItem.name = "";
+            billItem.cost = 0f;
+            billItem.quantity = 1;
+            data.add(size-2,billItem);
+
+            adapter.notifyItemInserted(size-2);
         }
         return super.onOptionsItemSelected(item);
     }

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.oic.calcmarket.R;
+import com.oic.calcmarket.models.BaseBillData;
 
 import butterknife.ButterKnife;
 
@@ -28,6 +29,11 @@ public class BillViewTotal extends BillView {
     public BillViewTotal(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
+    }
+
+    @Override
+    public void setDataContext(int position, BaseBillData data) {
+
     }
 
     private void init(AttributeSet attrs){

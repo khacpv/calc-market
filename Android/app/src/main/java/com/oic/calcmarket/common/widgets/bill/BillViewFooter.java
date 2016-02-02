@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.oic.calcmarket.R;
+import com.oic.calcmarket.models.BaseBillData;
 
 import butterknife.ButterKnife;
 
@@ -27,6 +28,11 @@ public class BillViewFooter extends BillView {
     public BillViewFooter(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(attrs);
+    }
+
+    @Override
+    public void setDataContext(int position, BaseBillData data) {
+
     }
 
     private void init(AttributeSet attrs){

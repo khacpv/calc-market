@@ -13,6 +13,7 @@ import com.oic.calcmarket.R;
 import com.oic.calcmarket.common.widgets.edittext.CEditText;
 import com.oic.calcmarket.common.widgets.edittext.CTextView;
 import com.oic.calcmarket.common.widgets.edittext.OnKeyBackListener;
+import com.oic.calcmarket.models.BaseBillData;
 import com.oic.calcmarket.models.BillItem;
 
 import butterknife.Bind;
@@ -65,6 +66,8 @@ public class BillViewItem extends BillView {
         init();
     }
 
+
+
     private void init(){
         LayoutInflater.from(getContext()).inflate(R.layout.bill_item, this, true);
 
@@ -100,10 +103,16 @@ public class BillViewItem extends BillView {
         setFocusChange(false);
     }
 
-    public void setDataContext(BillItem data){
+    @Override
+    public void setDataContext(int position, BaseBillData data) {
+        setDataContext(position,(BillItem)data);
+    }
+
+    public void setDataContext(int position,BillItem data){
         tvTitle.setText(data.name);
         tvCost.setText(data.cost + "");
-        tvQty.setText(data.quantity);
+        tvQty.setText(data.quantity+"");
+        tvIndex.setText(position+".");
         setFocusChange(false);
     }
 
