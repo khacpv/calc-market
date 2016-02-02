@@ -1,28 +1,30 @@
-package com.oic.calcmarket;
+package com.oic.calcmarket.screens.bill;
 
-import android.location.LocationManager;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.mirasense.scanditsdk.interfaces.ScanditSDKOverlay;
+import com.oic.calcmarket.BaseActivity;
+import com.oic.calcmarket.R;
 import com.oic.calcmarket.common.network.BarcodeMng;
-import com.oic.calcmarket.common.views.edittext.CTextView;
-import com.oic.calcmarket.common.views.market.BillLayout;
-import com.oic.calcmarket.common.views.residemenu.ResideMenu;
-import com.oic.calcmarket.common.views.residemenu.ResideMenuItem;
+import com.oic.calcmarket.common.widgets.bill.BillAdapter;
+import com.oic.calcmarket.common.widgets.edittext.CTextView;
+import com.oic.calcmarket.common.widgets.bill.BillViewItem;
+import com.oic.calcmarket.common.widgets.residemenu.ResideMenu;
+import com.oic.calcmarket.common.widgets.residemenu.ResideMenuItem;
 import com.oic.calcmarket.models.BarcodeRsp;
-import com.oic.calcmarket.screens.bill.BillGetter;
+import com.oic.calcmarket.models.BaseBillData;
+import com.oic.calcmarket.models.BillItem;
 import com.scandit.barcodepicker.BarcodePicker;
 import com.scandit.barcodepicker.OnScanListener;
 import com.scandit.barcodepicker.ScanSession;
@@ -30,20 +32,18 @@ import com.scandit.barcodepicker.ScanSettings;
 import com.scandit.barcodepicker.ScanditLicense;
 import com.scandit.recognition.Barcode;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import dagger.Component;
-import dagger.Module;
-import dagger.Provides;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
 import retrofit.Retrofit;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener, OnScanListener, BillLayout.OnBillChangedListener {
+public class BillActivity extends BaseActivity implements View.OnClickListener, OnScanListener, BillViewItem.OnBillChangedListener {
 
     public static final String titles[] = {"Shopping", "History", "Settings"};
     public static final int icon[] = {R.drawable.ic_menu_home, R.drawable.ic_menu_profile, R.drawable.ic_menu_setting};
@@ -60,10 +60,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     public FrameLayout scanLayout;
 
     @Bind(R.id.layoutProducts)
-    public LinearLayout layoutProducts;
-
-    @Bind(R.id.tvTotal)
-    public CTextView tvTotal;
+    public RecyclerView layoutProducts;
 
     private boolean isRequesting = false;
 
@@ -71,8 +68,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
     Handler mHandler = new Handler();
 
-    @Inject
-    LocationManager locationManager;
+    List<BaseBillData> data;
+    BillAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,38 +94,33 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
 
         setupResideMenu();
 
-        int childCount = layoutProducts.getChildCount();
-        for(int i=0;i<childCount;i++){
-            BillLayout item = (BillLayout)layoutProducts.getChildAt(i);
-            item.reset();
-            item.setOnBillChangedListener(this);
-        }
-
-        MainActivityComponent component = DaggerMainActivity_MainActivityComponent.builder()
-                .build();
-        BillGetter bill = component.billGetter();
-        Log.e("TAG", bill.getBill());
-        ((MainApplication) getApplication()).component().inject(this);
-        Log.e("TAG", locationManager.toString());
+        init();
     }
 
-    @Component(modules = MainActivityModule.class)
-    @Singleton
-    public interface MainActivityComponent{
-        BillGetter billGetter();
+    private void init(){
+        data = new ArrayList<>();
+        data.add(new BaseBillData(BaseBillData.TYPE_BILL_HEADER));
+
+        data.addAll(getDataSample(5));
+
+        data.add(new BaseBillData(BaseBillData.TYPE_BILL_TOTAL));
+        data.add(new BaseBillData(BaseBillData.TYPE_BILL_FOOTER));
+        adapter = new BillAdapter(this,data,this);
+        layoutProducts.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        layoutProducts.setAdapter(adapter);
     }
 
-    @Module
-    public static class MainActivityModule {
-        @Provides
-        public BillGetter provideBillGetter(){
-            return new BillGetter() {
-                @Override
-                public String getBill() {
-                    return "Hello World";
-                }
-            };
+    private Collection<? extends BaseBillData> getDataSample(int count) {
+        List<BaseBillData> datas = new ArrayList<>();
+        for(int i=0;i<count;i++){
+            BillItem item = new BillItem(BaseBillData.TYPE_BILL_ITEM);
+            item.name = "Cocacola";
+            item.quantity = i%4;
+            item.cost = (i%4)*1000;
+            item.thumb = "http://google.com";
+            datas.add(item);
         }
+        return datas;
     }
 
     private void setupResideMenu() {
@@ -290,10 +282,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
             @Override
             public void onResponse(Response<BarcodeRsp> response, Retrofit retrofit) {
                 BarcodeRsp barcode = response.body();
-                BillLayout item = new BillLayout(MainActivity.this);
-                item.setDataContext(barcode);
-                item.setOnBillChangedListener(MainActivity.this);
-                layoutProducts.addView(item);
+
                 pendingFinish();
 
             }
@@ -315,21 +304,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener, 
     }
 
     @Override
-    public void remove(ViewGroup parent,BillLayout item) {
-        if(parent.getChildCount()<4){
-            item.reset();
-            parent.addView(item);
-        }
+    public void remove(BillViewItem item) {
+
     }
 
     @Override
     public void change(float cost, int quantity) {
-        float total = 0.0f;
-        int childCount = layoutProducts.getChildCount();
-        for(int i=0;i<childCount;i++){
-            BillLayout item = (BillLayout)layoutProducts.getChildAt(i);
-            total+=item.getCost();
-        }
-        tvTotal.setText(total+"");
+
+    }
+
+    @Override
+    public void add(BillViewItem item) {
+
+    }
+
+    @Override
+    public void sub(BillViewItem item) {
+
     }
 }

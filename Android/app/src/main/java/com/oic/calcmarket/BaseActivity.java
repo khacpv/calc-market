@@ -12,12 +12,8 @@ import javax.inject.Inject;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    @Inject
-    LocationManager locationManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((MainApplication) getApplication()).component().inject(this);
     }
 }

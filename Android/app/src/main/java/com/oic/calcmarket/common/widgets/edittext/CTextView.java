@@ -1,4 +1,4 @@
-package com.oic.calcmarket.common.views.edittext;
+package com.oic.calcmarket.common.widgets.edittext;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,8 +8,6 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.oic.calcmarket.R;

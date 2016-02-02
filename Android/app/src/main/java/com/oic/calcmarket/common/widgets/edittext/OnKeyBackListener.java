@@ -1,4 +1,4 @@
-package com.oic.calcmarket.common.views.edittext;
+package com.oic.calcmarket.common.widgets.edittext;
 
 /**
  * Created by khacpham on 1/12/16.

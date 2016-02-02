@@ -1,4 +1,4 @@
-package com.oic.calcmarket.common.views.residemenu;
+package com.oic.calcmarket.common.widgets.residemenu;
 
 import android.app.Activity;
 import android.content.Context;

@@ -3,6 +3,8 @@ package com.oic.calcmarket;
 import android.app.Application;
 import android.location.LocationManager;
 
+import com.oic.calcmarket.screens.bill.BillActivity;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -16,26 +18,5 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        component = DaggerMainApplication_ApplicationComponent.builder()
-                .androidModule(new AndroidModule(this))
-                .build();
-        component.inject(this);
-    }
-
-    @Singleton
-    @Component(modules = AndroidModule.class)
-    public interface ApplicationComponent {
-        void inject(MainApplication application);
-        void inject(BaseActivity activity);
-        void inject(MainActivity activity);
-    }
-
-    @Inject
-    LocationManager locationManager;
-
-    private ApplicationComponent component;
-
-    public ApplicationComponent component(){
-        return component;
     }
 }
