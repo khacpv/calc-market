@@ -15,4 +15,8 @@ public class BillItem extends BaseBillData{
     public BillItem(int type) {
         super(type);
     }
+
+    public float getTotal(){
+        return cost*quantity;
+    }
 }

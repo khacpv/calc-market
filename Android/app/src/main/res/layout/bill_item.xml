@@ -5,29 +5,17 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/btnDelete"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/xml_menu_item_select"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_delete" />
-
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/lyMarketItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_toRightOf="@id/btnDelete"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_marginTop="5dp">
 
         <com.oic.calcmarket.common.widgets.edittext.CTextView
             android:id="@+id/tvIndex"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
+            android:minWidth="30dp"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
             android:background="@color/colorTransparent"
             android:maxLength="10"
             android:text="1."
@@ -35,71 +23,85 @@
 
         <com.oic.calcmarket.common.widgets.edittext.CEditText
             android:id="@+id/tvTitle"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="80"
             android:background="@color/colorTransparent"
-            android:inputType="textNoSuggestions"
             android:maxLines="4"
+            android:layout_toRightOf="@+id/tvIndex"
+            android:layout_toLeftOf="@+id/tvCost"
+            android:layout_toStartOf="@id/tvCost"
+            android:layout_toEndOf="@id/tvIndex"
             android:singleLine="false"
             android:text="Bot canh cham muoi"
             android:textSize="@dimen/text_size_medium" />
 
         <com.oic.calcmarket.common.widgets.edittext.CEditText
             android:id="@+id/tvCost"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="20"
             android:background="@color/colorTransparent"
             android:gravity="right"
-            android:inputType="number|textNoSuggestions"
+            android:inputType="numberDecimal"
             android:maxLength="10"
-            android:paddingRight="10dp"
+            android:paddingStart="0dp"
             android:singleLine="true"
+            android:layout_alignParentEnd="true"
             android:selectAllOnFocus="true"
             android:text="1.2"
             android:textSize="@dimen/text_size_medium" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lyButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/lyMarketItem"
-        android:layout_toRightOf="@id/btnDelete"
-        android:orientation="horizontal"
-        android:gravity="right">
-
-        <ImageButton
-            android:id="@+id/btnSub"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_subtract" />
-
-        <ImageButton
-            android:id="@+id/btnAdd"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
-            android:layout_weight="1"
-            android:src="@drawable/ic_add" />
-
         <com.oic.calcmarket.common.widgets.edittext.CTextView
             android:id="@+id/tvQty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/colorTransparent"
             android:drawableLeft="@drawable/ic_multiple"
-            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/ic_multiple"
             android:gravity="right"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@id/tvCost"
             android:inputType="numberDecimal|textNoSuggestions"
             android:maxLength="10"
-            android:paddingRight="10dp"
             android:singleLine="true"
             android:text="1"
             android:textSize="@dimen/text_size_small" />
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/lyButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvTitle"
+            android:layout_toLeftOf="@id/tvQty"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <ImageButton
+                android:id="@+id/btnDelete"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/xml_menu_item_select"
+                android:scaleType="fitXY"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_delete" />
+
+            <ImageButton
+                android:id="@+id/btnSub"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:src="@drawable/ic_subtract" />
+
+            <ImageButton
+                android:id="@+id/btnAdd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="30dp"
+                android:layout_weight="1"
+                android:src="@drawable/ic_add" />
+        </LinearLayout>
+    </RelativeLayout>
+
+
 </RelativeLayout>

@@ -19,6 +19,7 @@ import com.oic.calcmarket.BaseActivity;
 import com.oic.calcmarket.R;
 import com.oic.calcmarket.common.network.BarcodeMng;
 import com.oic.calcmarket.common.widgets.bill.BillAdapter;
+import com.oic.calcmarket.common.widgets.bill.BillViewTotal;
 import com.oic.calcmarket.common.widgets.edittext.CTextView;
 import com.oic.calcmarket.common.widgets.bill.BillViewItem;
 import com.oic.calcmarket.common.widgets.residemenu.ResideMenu;
@@ -26,6 +27,7 @@ import com.oic.calcmarket.common.widgets.residemenu.ResideMenuItem;
 import com.oic.calcmarket.models.BarcodeRsp;
 import com.oic.calcmarket.models.BaseBillData;
 import com.oic.calcmarket.models.BillItem;
+import com.oic.calcmarket.models.BillTotal;
 import com.scandit.barcodepicker.BarcodePicker;
 import com.scandit.barcodepicker.OnScanListener;
 import com.scandit.barcodepicker.ScanSession;
@@ -39,6 +41,7 @@ import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 import retrofit.Call;
 import retrofit.Callback;
 import retrofit.Response;
@@ -104,12 +107,11 @@ public class BillActivity extends BaseActivity implements View.OnClickListener, 
 
         data.addAll(getDataSample(5));
 
-        data.add(new BaseBillData(BaseBillData.TYPE_BILL_TOTAL));
+        data.add(new BillTotal(BaseBillData.TYPE_BILL_TOTAL));
         data.add(new BaseBillData(BaseBillData.TYPE_BILL_FOOTER));
         adapter = new BillAdapter(this,data,this);
         layoutProducts.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         layoutProducts.setAdapter(adapter);
-        layoutProducts.setLayoutTransition(new LayoutTransition());
     }
 
     private Collection<? extends BaseBillData> getDataSample(int count) {
@@ -117,7 +119,7 @@ public class BillActivity extends BaseActivity implements View.OnClickListener, 
         for(int i=0;i<count;i++){
             BillItem item = new BillItem(BaseBillData.TYPE_BILL_ITEM);
             item.name = "Cocacola";
-            item.quantity = i%4;
+            item.quantity = 1;
             item.cost = (i%4)*1000;
             item.thumb = "http://google.com";
             datas.add(item);
@@ -240,6 +242,7 @@ public class BillActivity extends BaseActivity implements View.OnClickListener, 
             data.add(size-2,billItem);
 
             adapter.notifyItemInserted(size-2);
+            layoutProducts.scrollToPosition(size-1);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -250,12 +253,10 @@ public class BillActivity extends BaseActivity implements View.OnClickListener, 
         }
         if(scanLayout.getAlpha()==0){
             mPicker.startScanning();
-//            scanLayout.setVisibility(View.VISIBLE);
             scanMenu.setIcon(R.drawable.ic_scan_selected);
             scanLayout.animate().alpha(1).setDuration(2000).start();
         }else{
             mPicker.stopScanning();
-//            scanLayout.setVisibility(View.GONE);
             scanMenu.setIcon(R.drawable.ic_scan);
             scanLayout.animate().alpha(0).setDuration(2000).start();
         }
@@ -279,7 +280,7 @@ public class BillActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public void didScan(ScanSession scanSession) {
         if(isRequesting){
-            Log.e("TAG","found barcode but requesting. cancel request first");
+            Log.e("TAG", "found barcode but requesting. cancel request first");
             if(response!=null){
                 response.cancel();
             }
@@ -304,7 +305,7 @@ public class BillActivity extends BaseActivity implements View.OnClickListener, 
                 pendingFinish();
             }
 
-            public void pendingFinish(){
+            public void pendingFinish() {
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -317,21 +318,24 @@ public class BillActivity extends BaseActivity implements View.OnClickListener, 
 
     @Override
     public void remove(BillViewItem item) {
-
+        int position = item.getPos();
+        data.remove(position);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
-    public void change(float cost, int quantity) {
+    public void change(BillViewItem item) {
+        float total = 0f;
+        for(BaseBillData _dataItem: data){
+            if(_dataItem instanceof BillItem){
+                total += ((BillItem) _dataItem).getTotal();
+            }
+            if(_dataItem instanceof BillTotal){
+                ((BillTotal) _dataItem).total = total;
+            }
+        }
 
     }
 
-    @Override
-    public void add(BillViewItem item) {
 
-    }
-
-    @Override
-    public void sub(BillViewItem item) {
-
-    }
 }

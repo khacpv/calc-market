@@ -27,6 +27,10 @@ public class BillViewItem extends BillView {
 
     private OnBillChangedListener changedListener;
 
+    private int position;
+
+    private BillItem item;
+
     @Bind(R.id.btnDelete)
     ImageView btnDelete;
 
@@ -75,7 +79,7 @@ public class BillViewItem extends BillView {
 
         ButterKnife.bind(this);
 
-        btnDelete.setVisibility(View.INVISIBLE);
+        btnDelete.setVisibility(View.GONE);
         btnAdd.setVisibility(View.GONE);
         btnSub.setVisibility(View.GONE);
 
@@ -105,10 +109,12 @@ public class BillViewItem extends BillView {
 
     @Override
     public void setDataContext(int position, BaseBillData data) {
-        setDataContext(position,(BillItem)data);
+        setDataContext(position, (BillItem) data);
     }
 
     public void setDataContext(int position,BillItem data){
+        this.position = position;
+        this.item = data;
         tvTitle.setText(data.name);
         tvCost.setText(data.cost + "");
         tvQty.setText(data.quantity+"");
@@ -116,47 +122,84 @@ public class BillViewItem extends BillView {
         setFocusChange(false);
     }
 
+    public String getName(){
+        return tvTitle.getText().toString();
+    }
+
+    public float getCost(){
+        return Float.valueOf(tvCost.getText().toString());
+    }
+
+    public int getQt(){
+        return Integer.valueOf(tvQty.getText().toString());
+    }
+
+    public int getPos(){
+        return position;
+    }
+
+    public BillItem getBill(){
+        return item;
+    }
+
     public void setFocusChange(boolean hasFocus){
-        btnDelete.setVisibility(hasFocus ? View.VISIBLE : View.INVISIBLE);
+        btnDelete.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
         btnAdd.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
         btnSub.setVisibility(hasFocus ? View.VISIBLE : View.GONE);
         if(hasFocus){
             tvQty.setVisibility(View.VISIBLE);
+            lyButtons.setVisibility(VISIBLE);
         }
-        int quantity = 0;
-        float cost = 0;
         try {
-            quantity = Integer.parseInt(tvQty.getText().toString());
-            if(!hasFocus && quantity == 1){
+            int quantity = Integer.parseInt(tvQty.getText().toString());
+            if(!hasFocus && quantity <= 1){
                 tvQty.setVisibility(View.GONE);
+                lyButtons.setVisibility(GONE);
             }
         }catch (Exception e){
             e.printStackTrace();
         }
         try{
-            cost = Float.parseFloat(tvCost.getText().toString());
+            float cost = Float.parseFloat(tvCost.getText().toString());
         }catch (Exception e){
             e.printStackTrace();
         }
 
-        if(changedListener!=null){
-            changedListener.change(cost, quantity);
+        updateData();
+        if(changedListener!=null) {
+            changedListener.change(this);
         }
     }
 
     @OnClick({R.id.btnAdd,R.id.btnSub,R.id.btnDelete})
     public void btnClicked(View view){
+        int qty = Integer.valueOf(tvQty.getText().toString());
         switch (view.getId()){
             case R.id.btnAdd:
-                changedListener.add(this);
+                qty++;
+                tvQty.setText(qty + "");
                 break;
             case R.id.btnSub:
-                changedListener.sub(this);
+                if(qty>1) {
+                    qty--;
+                }
+                tvQty.setText(qty + "");
                 break;
             case R.id.btnDelete:
                 changedListener.remove(this);
-                break;
+                return;
         }
+        updateData();
+        changedListener.change(this);
+    }
+
+    public void updateData(){
+        if(item == null){
+            item = new BillItem(BaseBillData.TYPE_BILL_ITEM);
+        }
+        item.cost = Float.valueOf(tvCost.getText().toString());
+        item.quantity = Integer.valueOf(tvQty.getText().toString());
+        item.name = tvTitle.getText().toString();
     }
 
     public void setOnBillChangedListener(OnBillChangedListener listener){
@@ -165,9 +208,7 @@ public class BillViewItem extends BillView {
 
     public interface OnBillChangedListener {
         void remove(BillViewItem item);
-        void change(float cost,int quantity);
-        void add(BillViewItem item);
-        void sub(BillViewItem item);
+        void change(BillViewItem item);
     }
 
 }

@@ -7,14 +7,21 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.oic.calcmarket.R;
+import com.oic.calcmarket.common.widgets.edittext.CTextView;
 import com.oic.calcmarket.models.BaseBillData;
+import com.oic.calcmarket.models.BillTotal;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by khacpham on 2/2/16.
  */
 public class BillViewTotal extends BillView {
+
+    @Bind(R.id.tvTotal)
+    CTextView tvTotal;
 
     public BillViewTotal(Context context) {
         super(context);
@@ -33,7 +40,9 @@ public class BillViewTotal extends BillView {
 
     @Override
     public void setDataContext(int position, BaseBillData data) {
-
+        if(data instanceof BillTotal){
+            tvTotal.setText(((BillTotal) data).total+"");
+        }
     }
 
     private void init(AttributeSet attrs){
